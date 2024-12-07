@@ -150,10 +150,11 @@ class FamilyTree:
 # Example usage
 def create_family_tree():
     # Create a family tree
-    family = FamilyTree()
+    family =      FamilyTree()
 
     # Add some family members with the new metadata structure
-    grandpa_id = family.add_member(
+    grandpa_id = 
+    family.add_member(
         name="Ben Roberson",
         age=65,
         gender="Male",
