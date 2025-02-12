@@ -24,6 +24,7 @@ A Python application for creating and visualizing family trees - specifically fo
 ### Installation
 
 1. Install uv if you haven't already:
+
 ```bash
 # On macOS/Linux
 curl -LsSf https://astral.sh/uv/install.sh | sh
@@ -33,12 +34,14 @@ powershell -c "irm https://astral.sh/uv/install.ps1 | iex"
 ```
 
 2. Clone the repository:
+
 ```bash
 git clone https://github.com/yourusername/sims-family-tree-builder.git
 cd sims-family-tree-builder
 ```
 
 3. Run the application using uv:
+
 ```bash
 uv run main.py
 ```

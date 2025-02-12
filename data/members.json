@@ -7,14 +7,13 @@
         "location": "Newcrest",
         "occupation": "Mother",
         "aspiration": "Bestselling Author",
-        "cause_of_death": "",
+        "cause_of_death": null,
         "extra_information": "Muser, Bookworm, Music Lover, Maker, Cheerful",
-        "father": "",
-        "mother": "",
-        "spouses": [
-            "Ben Robertson",
-            "Jaime Fraser"
-        ]
+        "father": null,
+        "mother": null,
+        "spouses": ["Ben Robertson", "Jaime Fraser"],
+    	"maiden_name": "Brooke Reins",
+    	"occult": null
     },
     {
         "id": 2,
@@ -24,29 +23,31 @@
         "location": "Newcrest",
         "occupation": "Doctor- GP",
         "aspiration": "Big Happy Family",
-        "cause_of_death": "",
-        "extra_information": "Domestic, Loyal, Ambitious, Family-Oriented",
+        "cause_of_death": null,
+        "extra_information": "Domestic, Loyal, Ambitious, Family-Oriented ",
         "father": null,
         "mother": null,
-        "spouses": [
-            "Brooke Robertson"
-        ]
+        "spouses": ["Brooke Robertson"],
+    	"maiden_name": null,
+    	"occult": null
+
     },
     {
         "id": 3,
         "name": "Brianna Potter",
         "age": "Young Adult",
         "gender": "Female",
-        "location": "dead",
-        "occupation": "",
+        "location": "Heaven",
+        "occupation": null,
         "aspiration": "Start a company",
         "cause_of_death": "Anger",
-        "extra_information": "",
+        "extra_information": null,
         "father": "Jamie Fraser",
         "mother": "Brooke Robertson",
-        "spouses": [
-            "Harry Potter"
-        ]
+        "spouses": ["Harry Potter"],
+    	"maiden_name": "Brianna Fraser",
+    	"occult": null
+
     },
     {
         "id": 4,
@@ -58,11 +59,12 @@
         "aspiration": "Soulmate",
         "cause_of_death": "Old Age",
         "extra_information": "Had a Deadly Disease, Good, Loves Outdoors, Family-Oriented,Loyal",
-        "father": "",
-        "mother": "",
-        "spouses": [
-            "Cassandra Goth Fraser"
-        ]
+        "father": null,
+        "mother": null,
+        "spouses": ["Cassandra Goth Fraser"],
+    	"maiden_name": null,
+    	"occult": null
+
     },
     {
         "id": 5,
@@ -72,45 +74,48 @@
         "location": "Newcrest",
         "occupation": "Passion Assistant",
         "aspiration": "Inner Peace",
-        "cause_of_death": "",
+        "cause_of_death": null,
         "extra_information": "Creative, Loves Music, Good",
         "father": "Mortimer Goth",
         "mother": "Bella Morlind",
-        "spouses": [
-            "Jamie Fraser"
-        ]
+        "spouses": ["Jamie Fraser"],
+    	"maiden_name": "Cassandra Goth",
+    	"occult": null
+
     },
     {
         "id": 6,
         "name": "Sage Robertson",
         "age": "Young Adult",
         "gender": "Male",
-        "location": "Newcrest",
-        "occupation": "",
+        "location": "Sulani",
+        "occupation": null,
         "aspiration": "Successful Lineage",
-        "cause_of_death": "",
+        "cause_of_death": null,
         "extra_information": "Domestic, Genius, Adventurous, Ambitious, Familly-Oriented",
         "father": "Ben Robertson",
         "mother": "Brooke Robertson",
-        "spouses": [
-            "Brylee Robertson"
-        ]
+        "spouses": ["Brylee Robertson"],
+    	"maiden_name": null,
+    	"occult": null
+
     },
     {
         "id": 7,
         "name": "Brylee Robertson",
         "age": "Young Adult",
         "gender": "Female",
-        "location": "Newcrest",
+        "location": "Sulani",
         "occupation": "Lifeguard",
         "aspiration": "Beach Life",
-        "cause_of_death": "",
+        "cause_of_death": null,
         "extra_information": "Home Turf, Loves Outdoors, Lovebug, Ambitious",
-        "father": "",
-        "mother": "Mele Kahananui",
-        "spouses": [
-            "Sage Robertson"
-        ]
+        "father": null,
+        "mother": null,
+        "spouses": ["Sage Robertson"],
+	"maiden_name": "Brylee Kahananui",
+	"occult": "Mermaid"
+
     },
     {
         "id": 8,
@@ -118,13 +123,16 @@
         "age": "Teen",
         "gender": "Female",
         "location": "Newcrest",
-        "occupation": "",
+        "occupation": null,
         "aspiration": "Eco Innovator",
-        "cause_of_death": "",
+        "cause_of_death": null,
         "extra_information": "Collector, Creative, Good",
-        "father": "Ben Robertson",
-        "mother": "Brooke Robertson",
-        "spouses": []
+        "father": "Nathan Beck",
+        "mother": "Max Robertson",
+        "spouses": [],
+	"maiden_name": null,
+	"occult": null
+
     },
     {
         "id": 9,
@@ -132,27 +140,33 @@
         "age": "Child",
         "gender": "Female",
         "location": "Newcrest",
-        "occupation": "",
+        "occupation": null,
         "aspiration": "Social Butterfly",
-        "cause_of_death": "",
+        "cause_of_death": null,
         "extra_information": "Goofball",
         "father": "Ben Robertson",
         "mother": "Brooke Robertson",
-        "spouses": []
+        "spouses": [],
+    	"maiden_name": null,
+    	"occult": null
+
     },
     {
-        "id": 10,
+        "id":10,
         "name": "Leo Robertson",
         "age": "Child",
         "gender": "Male",
         "location": "Newcrest",
-        "occupation": "",
+        "occupation": null,
         "aspiration": "Playtime Captain",
-        "cause_of_death": "",
+        "cause_of_death": null,
         "extra_information": "Genius",
         "father": "Ben Robertson",
         "mother": "Brooke Robertson",
-        "spouses": []
+        "spouses": [],
+    	"maiden_name": null,
+    	"occult": null
+
     },
     {
         "id": 11,
@@ -162,13 +176,14 @@
         "location": "Newcrest",
         "occupation": "Painter",
         "aspiration": "Big Happy Family",
-        "cause_of_death": "",
+        "cause_of_death": null,
         "extra_information": "Domestic, Music Lover, Generous, Good, Family-Oriented, Perfectionist, Cheerful",
         "father": "Ben Robertson",
         "mother": "Brooke Robertson",
-        "spouses": [
-            "Falcon Sanchez"
-        ]
+        "spouses": ["Falcon Sanchez"],
+    	"maiden_name": "Ashton Robertson",
+    	"occult": null
+
     },
     {
         "id": 12,
@@ -178,13 +193,14 @@
         "location": "Newcrest",
         "occupation": "Detective",
         "aspiration": "Big Happy Family",
-        "cause_of_death": "",
+        "cause_of_death": null,
         "extra_information": "Ambitious, Domestic, Romantic, Family-Oriented",
-        "father": "",
-        "mother": "",
-        "spouses": [
-            "Ashton Sanchez"
-        ]
+        "father": null,
+        "mother": null,
+        "spouses": ["Ashton Sanchez"],
+    	"maiden_name": null,
+    	"occult": null
+
     },
     {
         "id": 13,
@@ -192,13 +208,16 @@
         "age": "Child",
         "gender": "Female",
         "location": "Newcrest",
-        "occupation": "",
+        "occupation": null,
         "aspiration": "Mind and Body",
-        "cause_of_death": "",
+        "cause_of_death": null,
         "extra_information": "Good",
         "father": "Falcon Sanchez",
         "mother": "Ashton Sanchez",
-        "spouses": []
+        "spouses": [],
+	"maiden_name": null,
+	"occult": null
+
     },
     {
         "id": 14,
@@ -206,13 +225,16 @@
         "age": "Toddler",
         "gender": "Female",
         "location": "Newcrest",
-        "occupation": "",
-        "aspiration": "",
-        "cause_of_death": "",
+        "occupation": null,
+        "aspiration": null,
+        "cause_of_death": null,
         "extra_information": "Angelic",
         "father": "Falcon Sanchez",
-        "mother": "Ashton Robertson",
-        "spouses": []
+        "mother": "Ashton Sanchez",
+        "spouses": [],
+    	"maiden_name": null,
+    	"occult": null
+
     },
     {
         "id": 15,
@@ -220,13 +242,16 @@
         "age": "Toddler",
         "gender": "Female",
         "location": "Newcrest",
-        "occupation": "",
-        "aspiration": "",
-        "cause_of_death": "",
+        "occupation": null,
+        "aspiration": null,
+        "cause_of_death": null,
         "extra_information": "Silly",
         "father": "Falcon Sanchez",
-        "mother": "Ashton Robertson",
-        "spouses": []
+        "mother": "Ashton Sanchez",
+        "spouses": [],
+    	"maiden_name": null,
+    	"occult": null
+
     },
     {
         "id": 16,
@@ -236,13 +261,14 @@
         "location": "Newcrest",
         "occupation": "Office Assistant",
         "aspiration": "Successful Lineage",
-        "cause_of_death": "",
+        "cause_of_death": null,
         "extra_information": "Domestic, Self-Assured",
         "father": "Ben Robertson",
         "mother": "Brooke Robertson",
-        "spouses": [
-            "Kengo Robertson"
-        ]
+        "spouses": ["Kengo Robertson"],
+	"maiden_name": null,
+	"occult": null
+
     },
     {
         "id": 17,
@@ -250,57 +276,67 @@
         "age": "Young Adult",
         "gender": "Male",
         "location": "Newcrest",
-        "occupation": "",
+        "occupation": null,
         "aspiration": "Soulmate",
-        "cause_of_death": "",
+        "cause_of_death": null,
         "extra_information": "Alluring, Cheerful, Romantic, Family-Oriented",
-        "father": "Tsuyoshi Fujiwara",
-        "mother": "Hana Munch",
-        "spouses": [
-            "Luke Robertson"
-        ]
+        "father": null,
+        "mother": null,
+        "spouses": ["Luke Robertson"],
+	"maiden_name": "Kengo Fujiwara",
+	"occult": null
+
     },
     {
-        "id": 18,
+        "id": 18 ,
         "name": "Wyatt Roberson",
         "age": "Child",
         "gender": "Male",
         "location": "Newcrest",
-        "occupation": "",
+        "occupation": null,
         "aspiration": "Rambunctious Scamp",
-        "cause_of_death": "",
+        "cause_of_death": null,
         "extra_information": "Practice Makes Perfect",
         "father": "Luke Robertson",
         "mother": "Kengo Robertson",
-        "spouses": []
+        "spouses": [],
+	"maiden_name": null,
+	"occult": null
+
     },
     {
         "id": 19,
-        "name": "Eloise Robertson",
-        "age": "Child",
+        "name": "Carlin Robertson",
+        "age": "Teen",
         "gender": "Female",
         "location": "Newcrest",
-        "occupation": "",
+        "occupation": null,
         "aspiration": "Whiz Kid",
-        "cause_of_death": "",
+        "cause_of_death": null,
         "extra_information": "Active",
         "father": "Luke Robertson",
         "mother": "Kengo Robertson",
-        "spouses": []
+        "spouses": [],
+	"maiden_name": null,
+	"occult": null
+
     },
     {
         "id": 20,
         "name": "Madeline Fraser",
         "age": "Teen",
         "gender": "Female",
-        "location": "Newcrest",
-        "occupation": "",
+        "location": "Evergreen Harbor",
+        "occupation": null,
         "aspiration": "Ghost Historian",
-        "cause_of_death": "",
-        "extra_information": "Childish, Bookworm",
-        "father": "Sean Boyd",
-        "mother": "Alisha Applebee",
-        "spouses": []
+        "cause_of_death": null,
+        "extra_information": "Adopted, the biological child of Alisha Applebee and Sean Boyd, Childish, Bookworm",
+        "father": "Jamie Fraser",
+        "mother": "Cassandra Goth Fraser",
+        "spouses": ["Julianne Fraser"],
+	"maiden_name": null,
+	"occult": null
+
     },
     {
         "id": 21,
@@ -310,84 +346,336 @@
         "location": "Newcrest",
         "occupation": "Wildlife Enthusiast",
         "aspiration": "Outdoor Enthusiast",
-        "cause_of_death": "",
+        "cause_of_death": null,
         "extra_information": "Cheerful, Generous, Child of The Ocean, Loyal",
         "father": "Jamie Fraser",
         "mother": "Cassandra Goth Fraser",
-        "spouses": [
-            "Julianne Fraser"
-        ]
+        "spouses": [],
+	"maiden_name": null,
+	"occult": null
+
     },
     {
-        "id": 22,
+        "id": 22 ,
         "name": "Joanie Fraser",
         "age": "Teen",
         "gender": "Female",
         "location": "Newcrest",
-        "occupation": "",
+        "occupation": null,
         "aspiration": "Live Fast",
-        "cause_of_death": "",
+        "cause_of_death": null,
         "extra_information": "Neat, Bro",
         "father": "Jamie Fraser",
         "mother": "Cassandra Goth Fraser",
-        "spouses": []
+        "spouses": [],
+	"maiden_name": null,
+	"occult": null
+
     },
     {
-        "id": 23,
+        "id": 23 ,
         "name": "Julianne Fraser",
         "age": "Young Adult",
         "gender": "Female",
-        "location": "Newcrest",
-        "occupation": "",
+        "location": "Evergreen Harbor",
+        "occupation": null,
         "aspiration": "Jungle Explorer",
-        "cause_of_death": "",
+        "cause_of_death": null,
         "extra_information": "Adventurous, Green Friend, Bro",
-        "father": "Tina Tinker",
-        "mother": "Yasemin Tinker",
-        "spouses": [
-            "Brian Murtaugh Fraser"
-        ]
+        "father": null,
+        "mother": null,
+        "spouses": ["Madeline Fraser"],
+	"maiden_name": "Julianne Tinker",
+	"occult": null
+
     },
     {
-        "id": 24,
+        "id": 24 ,
         "name": "Luke Alexander Fraser",
         "age": "Teen",
         "gender": "Male",
         "location": "Newcrest",
-        "occupation": "",
+        "occupation": null,
         "aspiration": "Extreme Sports Enthusiast",
-        "cause_of_death": "",
+        "cause_of_death": null,
         "extra_information": "Erratic, Active",
         "father": "Jamie Fraser",
         "mother": "Senior Pollination Technician #3",
-        "spouses": []
+        "spouses": [],
+	"maiden_name": null,
+	"occult": "Alien"
+
     },
     {
-        "id": 25,
+        "id": 25 ,
         "name": "James Malcolm Fraser",
         "age": "Teen",
         "gender": "Male",
         "location": "Newcrest",
-        "occupation": "",
+        "occupation": null,
         "aspiration": "Country Caretaker",
-        "cause_of_death": "",
+        "cause_of_death": null,
         "extra_information": "Loves Outdoors, Loyal",
         "father": "Jamie Fraser",
         "mother": "Cassandra Goth Fraser",
-        "spouses": []
+        "spouses": [],
+	"maiden_name": null,
+	"occult": null
+
     },
     {
-        "id": 26,
+        "id": 26 ,
         "name": "Max Roberson",
         "age": "Young Adult",
         "gender": "Female",
         "location": "Heaven",
-        "occupation": "",
+        "occupation": null,
         "aspiration": "Drugz",
         "cause_of_death": "Suicide",
-        "extra_information": "Lesbian, Drug Addict, Forsoke Family, Trailer Park Ho",
+        "extra_information": "Lesbian, Drug Addict, Forsoke Family, Trailer Park Hoe",
         "father": "Ben Robertson",
-        "mother": "Brooke Roberson",
-        "spouses": []
+        "mother": "Brooke Robertson",
+        "spouses": [],
+	"maiden_name": null,
+	"occult": null
+
+    },
+    {
+        "id": 27,
+        "name": "Faith Roswell",
+        "age": "Young Adult",
+        "gender": "Female",
+        "location": "San Myshuno",
+        "occupation": "Symphonic Strings Player",
+        "aspiration": "Musical Genius",
+        "cause_of_death": "",
+        "extra_information": "Active, Creative, Brewmeister, Master of Cheese, The Knowledge, Good Manners, Artist, Graduated HS early, Cheerful, Overachiever, Music Lover, Horny, Alluring, Responsible, High Self Esteem, Muse, Hero",
+        "father": "Jamie Fraser",
+        "mother": "Brooke Robertson",
+        "spouses": ["Cullen Roswell"],
+	"maiden_name": "Faith Roberson",
+	"occult": null
+
+    },
+    {
+        "id": 28,
+        "name": "Cullen Roswell",
+        "age": "Young Adult",
+        "gender": "Male",
+        "location": "San Myshuno",
+        "occupation": "Evidence Eraser",
+        "aspiration": "Big Happy Family",
+        "cause_of_death": "",
+        "extra_information": "Loyal, Childish, Master of Cheese, Caregiver, Fear of Death, Cheerful, Domestic, Innocent",
+        "father": null,
+        "mother": null,
+        "spouses": ["Faith Roswell"],
+	"maiden_name": null,
+	"occult": null
+
+    },
+    {
+        "id": 29,
+        "name": "Jamie Roswell",
+        "age": "Child",
+        "gender": "Male",
+        "location": "San Myshuno",
+        "occupation": null,
+        "aspiration": "Artistic Prodigy",
+        "cause_of_death": "",
+        "extra_information": "Music Lover",
+        "father": "Cullen Roswell",
+        "mother": "Faith Roswell",
+        "spouses": [],
+	"maiden_name": null,
+	"occult": null
+
+    },
+    {
+        "id": 30,
+        "name": "Alisha Applebee",
+        "age": "Young Adult",
+        "gender": "Female",
+        "location": "San Sequoia",
+        "occupation": "Stay at Home Mom",
+        "aspiration": "Big Happy Family",
+        "cause_of_death": "",
+        "extra_information": "Bookworm, Proper, Clubber, Collector, Jester, Fear of Being Cheated On, ADHD, Outgoing, Sage, Fear of The Dark",
+        "father": "Jamie Fraser",
+        "mother": "Cassandra Goth Fraser",
+        "spouses": ["Adam Applebee"],
+	"maiden_name": null,
+	"occult": null
+
+    },
+    {
+        "id": 31,
+        "name": "Adam Applebee",
+        "age": "Young Adult",
+        "gender": "Male",
+        "location": "San Sequoia",
+        "occupation": "Sitcom Star",
+        "aspiration": "World Famous Celebrity",
+        "cause_of_death": "",
+        "extra_information": "Family Oriented, Foodie, Observant, Dastardly, Gregarious, Jester, Goofball, Essence of Flavor, Caregiver",
+        "father": null,
+        "mother": null,
+        "spouses": ["Alisha Applebee"],
+	"maiden_name": null,
+	"occult": null
+
+    },
+    {
+        "id": 32,
+        "name": "Piper Applebee",
+        "age": "Child",
+        "gender": "Female",
+        "location": "San Sequoia",
+        "occupation": null,
+        "aspiration": "Artistic Prodigy",
+        "cause_of_death": "",
+        "extra_information": "Goofball, Neutral Confidence",
+        "father": "Adam Applebee",
+        "mother": "Alisha Applebee",
+        "spouses": [],
+	"maiden_name": null,
+	"occult": null
+
+    },
+    {
+        "id": 33,
+        "name": "Cody Robertson",
+        "age": "Young Adult",
+        "gender": "Male",
+        "location": "Newcrest",
+        "occupation": "Astronaut",
+        "aspiration": "Nerd Brain",
+        "cause_of_death": "",
+        "extra_information": "Adventurous, Socially Awkward, Quick Learner, Hero, Geek, Would be Happy to Have a  Child, Sage ",
+        "father": "Ben Robertson",
+        "mother": "Brooke Robertson",
+        "spouses": ["Tracey Robertson"],
+	"maiden_name": null,
+	"occult": null
+
+    },
+    {
+        "id": 34,
+        "name": "Tracey Robertson",
+        "age": "Young Adult",
+        "gender": "Female",
+        "location": "Newcrest",
+        "occupation": "Teacher",
+        "aspiration": "Master Chef",
+        "cause_of_death": "",
+        "extra_information": "Good, Nosy, Neutral About Having Children, Domestic, Artist, Music Lover, Caregiver",
+        "father": null,
+        "mother": null,
+        "spouses": ["Cody Robertson"],
+	"maiden_name": null,
+	"occult": null
+
+    },
+    {
+        "id": 35,
+        "name": "Iris Applebee",
+        "age": "Child",
+        "gender": "Female",
+        "location": "San Sequoia",
+        "occupation": null,
+        "aspiration": "Social Butterfly",
+        "cause_of_death": "",
+        "extra_information": "Cheerful",
+        "father": "Adam Applebee",
+        "mother": "Alisha Applebee",
+        "spouses": [],
+	"maiden_name": null,
+	"occult": null
+
+    },
+    {
+        "id":36,
+        "name": "Annie Robertson",
+        "age": "Child",
+        "gender": "Female",
+        "location": "Newcrest",
+        "occupation": null,
+        "aspiration": "Playtime Captain",
+        "cause_of_death": "",
+        "extra_information": "Creative, adopted",
+        "father": "Luke Robertson",
+        "mother": "Kengo Robertson",
+        "spouses": [],
+	"maiden_name": null,
+	"occult": null
+
+    },
+    {
+        "id": 37,
+        "name": "Cecelia Sanchez",
+        "age": "Toddler",
+        "gender": "Female",
+        "location": "Newcrest",
+        "occupation": null,
+        "aspiration": null,
+        "cause_of_death": "",
+        "extra_information": "Charmer",
+        "father": "Falcon Sanches",
+        "mother": "Ashton Sanchez",
+        "spouses": [],
+	"maiden_name": null,
+	"occult": null
+
+    },
+    {
+        "id": 38,
+        "name": "Jackson Roswell",
+        "age": "Child",
+        "gender": "Male",
+        "location": "San Myshuno",
+        "occupation": null,
+        "aspiration": "Playtime Captain",
+        "cause_of_death": "",
+        "extra_information": "Outgoing",
+        "father": "Cullen Roswell",
+        "mother": "Faith Roswell",
+        "spouses": [],
+	"maiden_name": null,
+	"occult": null
+
+    },
+    {
+        "id": 39 ,
+        "name": "Caleb Robertson",
+        "age": "Child",
+        "gender": "Male",
+        "location": "Newcrest",
+        "occupation": null,
+        "aspiration": null,
+        "cause_of_death": null,
+        "extra_information": "Goofball",
+        "father": "Luke Robertson",
+        "mother": "Kengo Robertson",
+        "spouses": [],
+	    "maiden_name": null,
+	    "occult": null
+
+    },
+    {
+        "id": 40,
+        "name": "Milan Robertson",
+        "age": "Toddler",
+        "gender": "Male",
+        "location": "Newcrest",
+        "occupation": null,
+        "aspiration": null,
+        "cause_of_death": null,
+        "extra_information": "Fussy",
+        "father": "Cody Robertson",
+        "mother": "Tracey Robertson",
+        "spouses": [],
+	    "maiden_name": null,
+	    "occult": null
+
     }
 ]
