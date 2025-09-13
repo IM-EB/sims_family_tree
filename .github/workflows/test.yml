@@ -38,7 +38,7 @@ jobs:
         fi
       
     - name: Run tests
-      run: npm test
+      run: timeout 300 npm run test:ci
       
     - name: Test data integrity
       run: |
