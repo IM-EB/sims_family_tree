@@ -1,0 +1,26 @@
+{
+  "name": "sims-family-tree",
+  "version": "2.0.0",
+  "description": "Interactive family tree visualization for Sims characters using D3.js",
+  "main": "family-tree.js",
+  "scripts": {
+    "start": "npx http-server . -p 3000 -o",
+    "dev": "npx http-server . -p 3000 -o -c-1",
+    "test": "npx http-server . -p 3001 -o test-family-tree.html",
+    "test:ci": "node scripts/run-tests.js",
+    "test:data": "node scripts/validate-data.js",
+    "test:tree": "node scripts/test-tree-logic.js",
+    "build": "echo 'No build step needed for D3.js'",
+    "lint": "echo 'No linting configured - add ESLint if needed'",
+    "validate": "npm run test:data && npm run test:tree"
+  },
+  "keywords": ["family-tree", "sims", "visualization", "interactive", "d3js"],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "http-server": "^14.1.1"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}
