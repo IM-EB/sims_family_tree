@@ -68,10 +68,35 @@ class FamilyTree {
         this.drawNodes(g, positions);
     }
 
+    /**
+     * Organizes family members into generations for tree visualization.
+     * 
+     * ALGORITHM OVERVIEW:
+     * 1. Initial Assignment: Assign generations based on parent-child relationships
+     * 2. Spouse Alignment: Post-process to ensure married couples are in the same generation
+     * 
+     * GENERATION ASSIGNMENT RULES:
+     * - Root members (no parents) start in generation 0
+     * - Children are placed in parent's generation + 1
+     * - Spouses are initially placed in the same generation as their partner
+     * - Post-processing fixes cases where spouses end up in different generations
+     * 
+     * SPECIAL CASE HANDLING:
+     * - Members with no parents but married to someone with parents
+     * - Example: Elisa Fraser (no parents) married to Luke Alexander Fraser (has parents)
+     * - Solution: Move the spouse without parents to match their partner's generation
+     * 
+     * @returns {Map} Map of generation numbers to arrays of members in that generation
+     */
     organizeByGeneration() {
         const generations = new Map();
         const visited = new Set();
 
+        /**
+         * Recursively assigns a member and their family to generations
+         * @param {Object} member - The family member to assign
+         * @param {number} gen - The generation number to assign
+         */
         const assignGeneration = (member, gen = 0) => {
             if (visited.has(member.name)) return;
             visited.add(member.name);
@@ -81,13 +106,13 @@ class FamilyTree {
             }
             generations.get(gen).push(member);
 
-            // Add children to next generation
+            // Add children to next generation (preserves parent-child relationships)
             const children = this.members.filter(m => 
                 m.father === member.name || m.mother === member.name
             );
             children.forEach(child => assignGeneration(child, gen + 1));
 
-            // Add spouses to same generation
+            // Add spouses to same generation (initial attempt - may need post-processing)
             if (member.spouses) {
                 member.spouses.forEach(spouseName => {
                     const spouse = this.memberMap.get(spouseName);
@@ -98,11 +123,12 @@ class FamilyTree {
             }
         };
 
-        // Start with root members (no parents)
+        // PHASE 1: Initial generation assignment based on parent-child relationships
+        // Start with root members (no parents) - these form the foundation of the tree
         const rootMembers = this.members.filter(m => !m.father && !m.mother);
         rootMembers.forEach(member => assignGeneration(member));
 
-        // Handle orphaned members
+        // Handle any orphaned members that weren't reached through the root traversal
         this.members.forEach(member => {
             if (!visited.has(member.name)) {
                 const gen = this.findMemberGeneration(member);
@@ -114,6 +140,97 @@ class FamilyTree {
             }
         });
 
+        // ============================================================================
+        // POST-PROCESSING: SPOUSE GENERATION ALIGNMENT
+        // ============================================================================
+        // This section fixes the issue where married couples end up in different 
+        // generations due to the initial parent-child based generation assignment.
+        //
+        // PROBLEM SCENARIO:
+        // - Elisa Fraser (no parents) gets assigned to generation 0 (root)
+        // - Luke Alexander Fraser (has parents: Jamie Fraser) gets assigned to generation 1
+        // - They are married but appear in different generations
+        // - Their children get placed in generation 2, creating a gap
+        //
+        // SOLUTION:
+        // We use intelligent rules to determine which generation is "correct" for both spouses
+        // and move them to the same generation while preserving parent-child relationships.
+        // ============================================================================
+        
+        // Create a mapping of member names to their current generation assignments
+        const memberToGeneration = new Map();
+        generations.forEach((members, gen) => {
+            members.forEach(member => {
+                memberToGeneration.set(member.name, gen);
+            });
+        });
+
+        // Find and fix spouse generation mismatches
+        this.members.forEach(member => {
+            if (member.spouses) {
+                member.spouses.forEach(spouseName => {
+                    const spouse = this.memberMap.get(spouseName);
+                    if (spouse) {
+                        const memberGen = memberToGeneration.get(member.name);
+                        const spouseGen = memberToGeneration.get(spouseName);
+                        
+                        // Only process if spouses are in different generations
+                        if (memberGen !== undefined && spouseGen !== undefined && memberGen !== spouseGen) {
+                            
+                            // ========================================================================
+                            // GENERATION SELECTION RULES
+                            // ========================================================================
+                            // Rule 1: One spouse has parents, the other doesn't
+                            //   → Use the generation of the spouse who has parents
+                            //   → This ensures family connections determine the correct generation
+                            //   → Example: Elisa (no parents) + Luke (has parents) → Use Luke's generation
+                            //
+                            // Rule 2: Both spouses have parents OR both don't have parents
+                            //   → Use the higher generation (more recent generation)
+                            //   → This prevents moving people to older generations unnecessarily
+                            //   → Example: Both have parents in different generations → Use the higher one
+                            // ========================================================================
+                            
+                            let correctGen = memberGen;
+                            
+                            if ((member.father || member.mother) && !(spouse.father || spouse.mother)) {
+                                // Member has parents, spouse doesn't → Use member's generation
+                                correctGen = memberGen;
+                            } else if (!(member.father || member.mother) && (spouse.father || spouse.mother)) {
+                                // Spouse has parents, member doesn't → Use spouse's generation
+                                correctGen = spouseGen;
+                            } else {
+                                // Both have parents or both don't have parents → Use higher generation
+                                correctGen = Math.max(memberGen, spouseGen);
+                            }
+                            
+                            // Move both spouses to the correct generation
+                            [member, spouse].forEach(person => {
+                                const currentGen = memberToGeneration.get(person.name);
+                                if (currentGen !== correctGen) {
+                                    // Remove from current generation
+                                    const currentGenArray = generations.get(currentGen);
+                                    if (currentGenArray) {
+                                        const personIndex = currentGenArray.findIndex(m => m.name === person.name);
+                                        if (personIndex !== -1) {
+                                            currentGenArray.splice(personIndex, 1);
+                                        }
+                                    }
+                                    
+                                    // Add to correct generation
+                                    if (!generations.has(correctGen)) {
+                                        generations.set(correctGen, []);
+                                    }
+                                    generations.get(correctGen).push(person);
+                                    memberToGeneration.set(person.name, correctGen);
+                                }
+                            });
+                        }
+                    }
+                });
+            }
+        });
+
         return generations;
     }
 
@@ -121,7 +238,10 @@ class FamilyTree {
         if (member.father || member.mother) {
             const fatherGen = this.getGenerationByName(member.father);
             const motherGen = this.getGenerationByName(member.mother);
-            return Math.max(fatherGen, motherGen) + 1;
+            const calculatedGen = Math.max(fatherGen, motherGen) + 1;
+            
+            
+            return calculatedGen;
         }
 
         // Try to find through spouse
@@ -140,12 +260,24 @@ class FamilyTree {
     getGenerationByName(name) {
         if (!name) return -1;
         
-        for (const [gen, members] of this.organizeByGeneration()) {
-            if (members.some(m => m.name === name)) {
-                return gen;
+        // Simple recursive generation calculation without calling organizeByGeneration
+        const calculateGeneration = (memberName, visited = new Set()) => {
+            if (visited.has(memberName)) return 0; // Avoid infinite loops
+            visited.add(memberName);
+            
+            const member = this.memberMap.get(memberName);
+            if (!member) return -1;
+            
+            if (member.father || member.mother) {
+                const fatherGen = member.father ? calculateGeneration(member.father, visited) : -1;
+                const motherGen = member.mother ? calculateGeneration(member.mother, visited) : -1;
+                return Math.max(fatherGen, motherGen) + 1;
             }
-        }
-        return -1;
+            
+            return 0;
+        };
+        
+        return calculateGeneration(name);
     }
 
     calculatePositions(generations) {
