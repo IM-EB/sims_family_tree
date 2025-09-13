@@ -363,7 +363,7 @@
         "extra_information": "Erratic, Active",
         "father": "Jamie Fraser",
         "mother": "Senior Pollination Technician #3",
-        "spouses": []
+        "spouses": ["Elisa Fraser"]
     },
     {
         "id": 25,
@@ -725,8 +725,8 @@
         "aspiration": null,
         "cause_of_death": null,
         "extra_information": "Born out of Wedlock",
-        "father": "Will Kirby",
-        "mother": "Carlin Robertson",
+        "father": "Luke Robertson",
+        "mother": "Kengo Robertson",
         "spouses": []
     },
     {
@@ -747,7 +747,7 @@
         "id": 51,
         "name": "Anastasia Fraser",
         "age": "Toddler",
-        "gender": null,
+        "gender": "Female",
         "location": null,
         "occupation": null,
         "aspiration": null,
@@ -760,8 +760,8 @@
     {
         "id": 52,
         "name": "Aspen Robertson",
-        "age": null,
-        "gender": null,
+        "age": "Toddler",
+        "gender": "Female",
         "location": null,
         "occupation": null,
         "aspiration": null,

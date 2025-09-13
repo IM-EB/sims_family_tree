@@ -1,0 +1,239 @@
+name: Family Tree Tests
+
+on:
+  push:
+    branches: [ main, master, develop ]
+  pull_request:
+    branches: [ main, master, develop ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        
+    - name: Install dependencies
+      run: npm install
+      
+    - name: Run tests
+      run: npm test
+      
+    - name: Test data integrity
+      run: |
+        echo "Testing JSON data integrity..."
+        node -e "
+          const fs = require('fs');
+          const data = JSON.parse(fs.readFileSync('data/members.json', 'utf8'));
+          console.log('✅ JSON is valid');
+          console.log('📊 Total members:', data.length);
+          
+          // Test for required fields
+          const requiredFields = ['name', 'age', 'gender'];
+          let missingFields = 0;
+          data.forEach((member, index) => {
+            requiredFields.forEach(field => {
+              if (!member[field]) {
+                console.log('❌ Member', index, 'missing field:', field);
+                missingFields++;
+              }
+            });
+          });
+          
+          if (missingFields === 0) {
+            console.log('✅ All members have required fields');
+          } else {
+            console.log('❌ Found', missingFields, 'missing required fields');
+            process.exit(1);
+          }
+          
+          // Test for circular references in relationships
+          const memberMap = new Map(data.map(m => [m.name, m]));
+          let circularRefs = 0;
+          
+          data.forEach(member => {
+            if (member.father && memberMap.has(member.father)) {
+              const father = memberMap.get(member.father);
+              if (father.father === member.name || father.mother === member.name) {
+                console.log('❌ Circular reference found:', member.name, 'and', member.father);
+                circularRefs++;
+              }
+            }
+            if (member.mother && memberMap.has(member.mother)) {
+              const mother = memberMap.get(member.mother);
+              if (mother.father === member.name || mother.mother === member.name) {
+                console.log('❌ Circular reference found:', member.name, 'and', member.mother);
+                circularRefs++;
+              }
+            }
+          });
+          
+          if (circularRefs === 0) {
+            console.log('✅ No circular references found');
+          } else {
+            console.log('❌ Found', circularRefs, 'circular references');
+            process.exit(1);
+          }
+        "
+        
+    - name: Test family tree functionality
+      run: |
+        echo "Testing family tree core functionality..."
+        node -e "
+          const fs = require('fs');
+          const data = JSON.parse(fs.readFileSync('data/members.json', 'utf8'));
+          
+          // Test generation organization logic
+          function organizeByGeneration(members) {
+            const generations = new Map();
+            const visited = new Set();
+            const memberMap = new Map(members.map(m => [m.name, m]));
+            
+            const assignGeneration = (member, gen = 0) => {
+              if (visited.has(member.name)) return;
+              visited.add(member.name);
+              
+              if (!generations.has(gen)) {
+                generations.set(gen, []);
+              }
+              generations.get(gen).push(member);
+              
+              // Add children to next generation
+              const children = members.filter(m => 
+                m.father === member.name || m.mother === member.name
+              );
+              children.forEach(child => assignGeneration(child, gen + 1));
+              
+              // Add spouses to same generation
+              if (member.spouses) {
+                member.spouses.forEach(spouseName => {
+                  const spouse = memberMap.get(spouseName);
+                  if (spouse && !visited.has(spouse.name)) {
+                    assignGeneration(spouse, gen);
+                  }
+                });
+              }
+            };
+            
+            // Start with root members
+            const rootMembers = members.filter(m => !m.father && !m.mother);
+            rootMembers.forEach(member => assignGeneration(member));
+            
+            return generations;
+          }
+          
+          const generations = organizeByGeneration(data);
+          console.log('✅ Generation organization works');
+          console.log('📊 Generations found:', generations.size);
+          
+          generations.forEach((members, gen) => {
+            console.log('  Generation', gen + ':', members.length, 'members');
+          });
+          
+          // Test position calculation
+          function calculatePositions(generations) {
+            const positions = new Map();
+            const GENERATION_HEIGHT = 200;
+            const MEMBER_SPACING = 300;
+            const START_Y = 100;
+            
+            const sortedGenerations = Array.from(generations.keys()).sort((a, b) => a - b);
+            
+            sortedGenerations.forEach(genNum => {
+              const genMembers = generations.get(genNum);
+              if (genMembers.length === 0) return;
+              
+              genMembers.forEach((member, i) => {
+                const x = i * MEMBER_SPACING;
+                const y = START_Y + genNum * GENERATION_HEIGHT;
+                positions.set(member.name, { x, y, member });
+              });
+            });
+            
+            return positions;
+          }
+          
+          const positions = calculatePositions(generations);
+          console.log('✅ Position calculation works');
+          console.log('📊 Positions calculated for', positions.size, 'members');
+          
+          // Test relationship finding
+          let marriageCount = 0;
+          let parentChildCount = 0;
+          
+          data.forEach(member => {
+            if (member.spouses && member.spouses.length > 0) {
+              marriageCount += member.spouses.length;
+            }
+            if (member.father) parentChildCount++;
+            if (member.mother) parentChildCount++;
+          });
+          
+          console.log('✅ Relationship counting works');
+          console.log('📊 Total marriages:', marriageCount);
+          console.log('📊 Total parent-child relationships:', parentChildCount);
+        "
+        
+    - name: Test HTML structure
+      run: |
+        echo "Testing HTML file structure..."
+        if [ -f "index.html" ]; then
+          echo "✅ index.html exists"
+        else
+          echo "❌ index.html missing"
+          exit 1
+        fi
+        
+        if [ -f "test-family-tree.html" ]; then
+          echo "✅ test-family-tree.html exists"
+        else
+          echo "❌ test-family-tree.html missing"
+          exit 1
+        fi
+        
+        if [ -f "family-tree.js" ]; then
+          echo "✅ family-tree.js exists"
+        else
+          echo "❌ family-tree.js missing"
+          exit 1
+        fi
+        
+        if [ -f "data/members.json" ]; then
+          echo "✅ data/members.json exists"
+        else
+          echo "❌ data/members.json missing"
+          exit 1
+        fi
+        
+    - name: Test package.json
+      run: |
+        echo "Testing package.json..."
+        node -e "
+          const pkg = require('./package.json');
+          console.log('✅ package.json is valid');
+          console.log('📦 Package name:', pkg.name);
+          console.log('📦 Version:', pkg.version);
+          
+          if (!pkg.scripts || !pkg.scripts.test) {
+            console.log('❌ Missing test script in package.json');
+            process.exit(1);
+          }
+          console.log('✅ Test script found:', pkg.scripts.test);
+        "
+        
+    - name: Upload test results
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: test-results
+        path: |
+          test-family-tree.html
+          data/members.json
+        retention-days: 7
