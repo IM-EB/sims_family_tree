@@ -25,6 +25,7 @@ An interactive family tree visualization built with D3.js, designed to handle co
 1. Clone or download this repository
 2. Navigate to the project directory
 3. Install dependencies:
+
    ```bash
    npm install
    ```
@@ -32,15 +33,19 @@ An interactive family tree visualization built with D3.js, designed to handle co
 ### Running the Application
 
 #### Option 1: Using npm (Recommended)
+
 ```bash
 npm start
 ```
+
 This will start a local server at `http://localhost:3000` and automatically open your browser.
 
 #### Option 2: Using the start script (Windows)
+
 Double-click `start.bat` to automatically start the Node.js server.
 
 #### Option 3: Direct File Access
+
 Simply open `index.html` in your web browser (note: this may have CORS issues with loading the JSON data)
 
 ### Testing
@@ -50,9 +55,11 @@ The project includes comprehensive tests to ensure all functionality works corre
 ```bash
 npm test
 ```
+
 This will start a test server at `http://localhost:3001` and open the test suite.
 
 **Note for Windows PowerShell users:** If you encounter issues with command separators, run commands individually:
+
 ```powershell
 npm test
 ```
@@ -126,13 +133,14 @@ The family tree data is stored in `data/members.json` with the following structu
 ## Development
 
 To run in development mode with auto-reload:
+
 ```bash
 npm run dev
 ```
 
 ## Project Structure
 
-```
+```text
 sims_family_tree/
 ├── data/
 │   └── members.json          # Family member data
