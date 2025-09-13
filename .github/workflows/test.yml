@@ -14,14 +14,28 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
       
+    - name: Verify lock file exists
+      run: |
+        if [ -f "package-lock.json" ]; then
+          echo "✅ package-lock.json found"
+        else
+          echo "⚠️ package-lock.json not found, will be generated during npm install"
+        fi
+      
     - name: Setup Node.js
       uses: actions/setup-node@v4
       with:
         node-version: '18'
         cache: 'npm'
+        cache-dependency-path: 'package-lock.json'
         
     - name: Install dependencies
-      run: npm install
+      run: |
+        if [ -f "package-lock.json" ]; then
+          npm ci --prefer-offline
+        else
+          npm install
+        fi
       
     - name: Run tests
       run: npm test
