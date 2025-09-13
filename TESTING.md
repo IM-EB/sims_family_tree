@@ -2,10 +2,6 @@
 
 This document explains the comprehensive testing setup for the Sims Family Tree project.
 
-## Overview
-
-The project includes multiple layers of testing to ensure data integrity, tree logic correctness, and visualization functionality.
-
 ## Test Structure
 
 ### 1. GitHub Actions (Automated CI/CD)
@@ -13,9 +9,11 @@ The project includes multiple layers of testing to ensure data integrity, tree l
 **File**: `.github/workflows/test.yml`
 
 Runs automatically on every commit and pull request to:
+
 - `main`, `master`, and `develop` branches
 
 **What it tests**:
+
 - Data integrity and JSON validation
 - Family relationship consistency
 - Tree logic and generation organization
@@ -27,6 +25,7 @@ Runs automatically on every commit and pull request to:
 **Location**: `scripts/` directory
 
 #### Data Validation (`scripts/validate-data.js`)
+
 - Validates JSON structure and required fields
 - Checks for unique member names
 - Validates data types (age, gender)
@@ -35,6 +34,7 @@ Runs automatically on every commit and pull request to:
 - Identifies orphaned members
 
 #### Tree Logic Testing (`scripts/test-tree-logic.js`)
+
 - Tests generation organization algorithm
 - Validates position calculation
 - Checks relationship mapping
@@ -43,6 +43,7 @@ Runs automatically on every commit and pull request to:
 - Tests canvas sizing logic
 
 #### Test Runner (`scripts/run-tests.js`)
+
 - Orchestrates all test suites
 - Provides comprehensive test results
 - Returns appropriate exit codes for CI/CD
@@ -52,6 +53,7 @@ Runs automatically on every commit and pull request to:
 **File**: `test-family-tree.html`
 
 Interactive test suite that runs in the browser to test:
+
 - Data loading and integrity
 - Family relationship validation
 - SVG rendering capabilities
@@ -80,6 +82,7 @@ npm test               # Opens test-family-tree.html
 ### GitHub Actions
 
 Tests run automatically on:
+
 - Push to main branches
 - Pull requests
 - Manual workflow dispatch
@@ -87,6 +90,7 @@ Tests run automatically on:
 ## Test Categories
 
 ### Data Integrity Tests
+
 - ✅ Required fields validation
 - ✅ Unique name checking
 - ✅ Data type validation
@@ -95,6 +99,7 @@ Tests run automatically on:
 - ✅ Orphaned member detection
 
 ### Tree Logic Tests
+
 - ✅ Generation organization
 - ✅ Position calculation
 - ✅ Relationship mapping
@@ -103,6 +108,7 @@ Tests run automatically on:
 - ✅ Canvas sizing
 
 ### Rendering Tests
+
 - ✅ SVG element creation
 - ✅ Node element creation
 - ✅ Connection line creation
@@ -111,6 +117,7 @@ Tests run automatically on:
 - ✅ Tree structure creation
 
 ### Interaction Tests
+
 - ✅ Member tooltip creation
 - ✅ Detailed tooltip creation
 - ✅ Hover event handling
@@ -119,6 +126,7 @@ Tests run automatically on:
 - ✅ Zoom and pan functionality
 
 ### Layout Tests
+
 - ✅ Generation organization
 - ✅ Tree position calculation
 - ✅ Canvas sizing
@@ -131,11 +139,13 @@ Tests run automatically on:
 The tests expect your `data/members.json` file to have:
 
 ### Required Fields
+
 - `name` (string, unique)
 - `age` (one of: Infant, Toddler, Child, Teen, Young Adult, Adult, Elder)
 - `gender` (one of: Male, Female)
 
 ### Optional Fields
+
 - `location` (string)
 - `occupation` (string)
 - `aspiration` (string)
@@ -172,6 +182,7 @@ The tests expect your `data/members.json` file to have:
 ### Debug Mode
 
 Run tests with detailed output:
+
 ```bash
 node scripts/validate-data.js
 node scripts/test-tree-logic.js
@@ -180,6 +191,7 @@ node scripts/test-tree-logic.js
 ## Continuous Integration
 
 The GitHub Actions workflow will:
+
 1. ✅ Checkout your code
 2. ✅ Setup Node.js environment
 3. ✅ Install dependencies
@@ -191,6 +203,7 @@ The GitHub Actions workflow will:
 ## Test Coverage
 
 Current test coverage includes:
+
 - **Data Layer**: 100% of validation scenarios
 - **Logic Layer**: 100% of tree algorithms
 - **Rendering Layer**: 100% of visualization components
@@ -217,6 +230,7 @@ To add new tests:
 ## Support
 
 If you encounter issues with the testing setup:
+
 1. Check the console output for specific error messages
 2. Verify your data structure matches requirements
 3. Ensure all dependencies are installed
