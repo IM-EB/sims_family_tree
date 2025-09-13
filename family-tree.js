@@ -282,8 +282,9 @@ class FamilyTree {
 
     calculatePositions(generations) {
         const positions = new Map();
-        const GENERATION_HEIGHT = 200; // Increased spacing
-        const MEMBER_SPACING = 300; // Increased spacing
+        const GENERATION_HEIGHT = 200;
+        const MEMBER_SPACING = 300;
+        const FAMILY_SPACING = 20; // Extra spacing between family groups (very small)
         const START_Y = 100;
 
         // Sort generations from oldest to youngest
@@ -301,36 +302,23 @@ class FamilyTree {
             });
         });
 
-        // Second pass: adjust positions to center parents over children
-        // Work from youngest generation to oldest
-        for (let i = sortedGenerations.length - 1; i >= 0; i--) {
-            const genNum = sortedGenerations[i];
-            const genMembers = generations.get(genNum);
-            
-            genMembers.forEach(member => {
-                const children = this.members.filter(m => 
-                    m.father === member.name || m.mother === member.name
-                );
+        // Second pass: identify family groups and add spacing between them
+        this.addFamilyGroupSpacing(positions, sortedGenerations, FAMILY_SPACING);
+
+        // Third pass: improved centering - work from youngest to oldest
+        // Use multiple iterations for better convergence
+        for (let iteration = 0; iteration < 3; iteration++) {
+            for (let i = sortedGenerations.length - 1; i >= 0; i--) {
+                const genNum = sortedGenerations[i];
+                const genMembers = generations.get(genNum);
                 
-                if (children.length > 0) {
-                    // Calculate center position of children
-                    const childPositions = children
-                        .map(child => positions.get(child.name))
-                        .filter(pos => pos !== undefined);
-                    
-                    if (childPositions.length > 0) {
-                        const centerX = childPositions.reduce((sum, pos) => sum + pos.x, 0) / childPositions.length;
-                        positions.set(member.name, { 
-                            x: centerX, 
-                            y: positions.get(member.name).y, 
-                            member: member 
-                        });
-                    }
-                }
-            });
+                genMembers.forEach(member => {
+                    this.centerMemberOverChildren(member, positions);
+                });
+            }
         }
 
-        // Third pass: handle spouses - position them next to their partners
+        // Fourth pass: handle spouses - position them next to their partners
         sortedGenerations.forEach(genNum => {
             const genMembers = generations.get(genNum);
             
@@ -358,10 +346,188 @@ class FamilyTree {
             });
         });
 
-        // Fourth pass: center the entire tree and ensure minimum spacing
+        // Fifth pass: final centering and spacing adjustments
         this.centerAndSpaceTree(positions, sortedGenerations, MEMBER_SPACING);
 
         return positions;
+    }
+
+    /**
+     * Identifies family groups and adds extra spacing between them
+     */
+    addFamilyGroupSpacing(positions, sortedGenerations, familySpacing) {
+        // Find root members (no parents) - these are the heads of family groups
+        const rootMembers = this.members.filter(m => !m.father && !m.mother);
+        
+        console.log(`🔍 Family spacing debug: Found ${rootMembers.length} root members:`, rootMembers.map(r => r.name));
+        
+        if (rootMembers.length <= 1) {
+            console.log('🔍 Only one family group, no spacing needed');
+            return; // No need for spacing if only one family group
+        }
+        
+        // Group connected root members together (they might be married or otherwise connected)
+        const familyGroups = this.groupConnectedRoots(rootMembers);
+        
+        console.log(`🔍 After grouping connected roots: ${familyGroups.length} distinct family groups`);
+        familyGroups.forEach((group, index) => {
+            console.log(`🔍 Family group ${index + 1}: ${group.length} root members, ${group.reduce((sum, root) => sum + this.getAllDescendants(root).length, 0)} total members`);
+        });
+        
+        // Calculate spacing between family groups
+        let currentX = 0;
+        const groupSpacing = familySpacing;
+        
+        console.log(`🔍 Starting family group positioning with spacing: ${groupSpacing}px`);
+        
+        familyGroups.forEach((rootGroup, groupIndex) => {
+            // Get all descendants from all roots in this group
+            const allDescendants = new Set();
+            rootGroup.forEach(root => {
+                const descendants = this.getAllDescendants(root);
+                descendants.forEach(desc => allDescendants.add(desc));
+            });
+            
+            const groupPositions = Array.from(allDescendants)
+                .map(desc => positions.get(desc.name))
+                .filter(pos => pos !== undefined);
+            
+            if (groupPositions.length > 0) {
+                const minGroupX = Math.min(...groupPositions.map(pos => pos.x));
+                const maxGroupX = Math.max(...groupPositions.map(pos => pos.x));
+                const groupWidth = maxGroupX - minGroupX;
+                
+                console.log(`🔍 Family group ${groupIndex + 1}: minX=${minGroupX}, maxX=${maxGroupX}, width=${groupWidth}, currentX=${currentX}`);
+                
+                // Position this family group
+                const offset = currentX - minGroupX;
+                console.log(`🔍 Applying offset ${offset} to ${groupPositions.length} positions`);
+                
+                groupPositions.forEach(pos => {
+                    pos.x += offset;
+                });
+                
+                // Move to next position for next family group
+                currentX += groupWidth + groupSpacing;
+                console.log(`🔍 Next family will start at X=${currentX}`);
+            }
+        });
+        
+        console.log(`🔍 Family spacing complete. Final tree width: ${currentX - groupSpacing}px`);
+    }
+    
+    /**
+     * Groups connected root members together (married couples, etc.)
+     */
+    groupConnectedRoots(rootMembers) {
+        const groups = [];
+        const visited = new Set();
+        
+        rootMembers.forEach(root => {
+            if (visited.has(root.name)) return;
+            
+            const group = [];
+            const queue = [root];
+            
+            while (queue.length > 0) {
+                const current = queue.shift();
+                if (visited.has(current.name)) continue;
+                
+                visited.add(current.name);
+                group.push(current);
+                
+                // Add spouses who are also root members
+                if (current.spouses) {
+                    current.spouses.forEach(spouseName => {
+                        const spouse = this.memberMap.get(spouseName);
+                        if (spouse && !spouse.father && !spouse.mother && !visited.has(spouseName)) {
+                            queue.push(spouse);
+                        }
+                    });
+                }
+            }
+            
+            if (group.length > 0) {
+                groups.push(group);
+            }
+        });
+        
+        return groups;
+    }
+    
+    /**
+     * Gets all descendants of a given member
+     */
+    getAllDescendants(member) {
+        const descendants = new Set([member]);
+        const queue = [member];
+        
+        while (queue.length > 0) {
+            const current = queue.shift();
+            const children = this.members.filter(m => 
+                m.father === current.name || m.mother === current.name
+            );
+            
+            children.forEach(child => {
+                if (!descendants.has(child)) {
+                    descendants.add(child);
+                    queue.push(child);
+                }
+            });
+        }
+        
+        return Array.from(descendants);
+    }
+    
+    /**
+     * Centers a member over their children with improved algorithm
+     */
+    centerMemberOverChildren(member, positions) {
+        const children = this.members.filter(m => 
+            m.father === member.name || m.mother === member.name
+        );
+        
+        if (children.length === 0) return;
+        
+        // Get positions of all children
+        const childPositions = children
+            .map(child => positions.get(child.name))
+            .filter(pos => pos !== undefined);
+        
+        if (childPositions.length === 0) return;
+        
+        // Calculate the center position
+        const centerX = childPositions.reduce((sum, pos) => sum + pos.x, 0) / childPositions.length;
+        
+        // For married couples, center both parents over their children
+        if (member.spouses && member.spouses.length > 0) {
+            const spouse = this.memberMap.get(member.spouses[0]);
+            if (spouse) {
+                const spousePos = positions.get(spouse.name);
+                if (spousePos) {
+                    // Position both parents centered over children
+                    const parentSpacing = 150; // Space between married parents
+                    positions.set(member.name, { 
+                        x: centerX - parentSpacing / 2, 
+                        y: positions.get(member.name).y, 
+                        member: member 
+                    });
+                    positions.set(spouse.name, { 
+                        x: centerX + parentSpacing / 2, 
+                        y: spousePos.y, 
+                        member: spouse 
+                    });
+                    return;
+                }
+            }
+        }
+        
+        // Single parent - center directly over children
+        positions.set(member.name, { 
+            x: centerX, 
+            y: positions.get(member.name).y, 
+            member: member 
+        });
     }
 
     centerAndSpaceTree(positions, sortedGenerations, MEMBER_SPACING) {
