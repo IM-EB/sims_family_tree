@@ -154,32 +154,117 @@ class FamilyTree {
         const MEMBER_SPACING = 300; // Increased spacing
         const START_Y = 100;
 
-        // Calculate the maximum width needed
-        const maxMembersInGen = Math.max(
-            ...Array.from(generations.values()).map(gen => gen.length),
-            1
-        );
-        const canvasWidth = Math.max(maxMembersInGen * MEMBER_SPACING + 200, this.width);
-
-        // Sort generations and position members
+        // Sort generations from oldest to youngest
         const sortedGenerations = Array.from(generations.keys()).sort((a, b) => a - b);
         
+        // First pass: position all members with basic spacing
         sortedGenerations.forEach(genNum => {
             const genMembers = generations.get(genNum);
             if (genMembers.length === 0) return;
 
-            // Position members horizontally across the generation
-            const totalWidth = genMembers.length * MEMBER_SPACING;
-            const startX = (canvasWidth - totalWidth) / 2;
-
             genMembers.forEach((member, i) => {
-                const x = startX + i * MEMBER_SPACING;
+                const x = i * MEMBER_SPACING; // Temporary position
                 const y = START_Y + genNum * GENERATION_HEIGHT;
                 positions.set(member.name, { x, y, member });
             });
         });
 
+        // Second pass: adjust positions to center parents over children
+        // Work from youngest generation to oldest
+        for (let i = sortedGenerations.length - 1; i >= 0; i--) {
+            const genNum = sortedGenerations[i];
+            const genMembers = generations.get(genNum);
+            
+            genMembers.forEach(member => {
+                const children = this.members.filter(m => 
+                    m.father === member.name || m.mother === member.name
+                );
+                
+                if (children.length > 0) {
+                    // Calculate center position of children
+                    const childPositions = children
+                        .map(child => positions.get(child.name))
+                        .filter(pos => pos !== undefined);
+                    
+                    if (childPositions.length > 0) {
+                        const centerX = childPositions.reduce((sum, pos) => sum + pos.x, 0) / childPositions.length;
+                        positions.set(member.name, { 
+                            x: centerX, 
+                            y: positions.get(member.name).y, 
+                            member: member 
+                        });
+                    }
+                }
+            });
+        }
+
+        // Third pass: handle spouses - position them next to their partners
+        sortedGenerations.forEach(genNum => {
+            const genMembers = generations.get(genNum);
+            
+            genMembers.forEach(member => {
+                if (member.spouses && member.spouses.length > 0) {
+                    const memberPos = positions.get(member.name);
+                    let spouseOffset = 0;
+                    
+                    member.spouses.forEach(spouseName => {
+                        const spouse = this.memberMap.get(spouseName);
+                        if (spouse) {
+                            const spousePos = positions.get(spouseName);
+                            if (spousePos && spousePos.x === memberPos.x) {
+                                // Spouse is at same position, offset them
+                                spouseOffset += MEMBER_SPACING / 2;
+                                positions.set(spouseName, {
+                                    x: memberPos.x + spouseOffset,
+                                    y: spousePos.y,
+                                    member: spouse
+                                });
+                            }
+                        }
+                    });
+                }
+            });
+        });
+
+        // Fourth pass: center the entire tree and ensure minimum spacing
+        this.centerAndSpaceTree(positions, sortedGenerations, MEMBER_SPACING);
+
         return positions;
+    }
+
+    centerAndSpaceTree(positions, sortedGenerations, MEMBER_SPACING) {
+        // Find the bounds of all positioned members
+        let minX = Infinity, maxX = -Infinity;
+        positions.forEach(pos => {
+            minX = Math.min(minX, pos.x);
+            maxX = Math.max(maxX, pos.x);
+        });
+
+        // Calculate center offset to center the tree
+        const treeWidth = maxX - minX;
+        const centerOffset = (this.width - treeWidth) / 2 - minX;
+
+        // Apply center offset to all positions
+        positions.forEach(pos => {
+            pos.x += centerOffset;
+        });
+
+        // Ensure minimum spacing between members in each generation
+        sortedGenerations.forEach(genNum => {
+            const genMembers = Array.from(positions.values())
+                .filter(pos => pos.y === positions.get(Array.from(positions.keys())[0]).y + genNum * 200)
+                .sort((a, b) => a.x - b.x);
+
+            for (let i = 1; i < genMembers.length; i++) {
+                const prevPos = genMembers[i - 1];
+                const currPos = genMembers[i];
+                const minDistance = MEMBER_SPACING;
+
+                if (currPos.x - prevPos.x < minDistance) {
+                    currPos.x = prevPos.x + minDistance;
+                }
+            }
+        });
     }
 
     drawConnections(g, positions) {
@@ -251,7 +336,7 @@ class FamilyTree {
                 }
                 let hasValidParent = false;
                 
-                // If child has both parents, draw line from father (simpler visual)
+                // If child has both parents, draw line from marriage midpoint
                 if (member.father && member.mother) {
                     const father = this.memberMap.get(member.father);
                     const mother = this.memberMap.get(member.mother);
@@ -259,10 +344,15 @@ class FamilyTree {
                         const fatherPos = positions.get(member.father);
                         const motherPos = positions.get(member.mother);
                         if (fatherPos && motherPos) {
-                            // Draw line from father to child (cleaner visual)
-                            this.drawParentChildLine(g, fatherPos, memberPos, member);
+                            // Calculate midpoint of marriage line
+                            const marriageMidpoint = {
+                                x: (fatherPos.x + motherPos.x) / 2,
+                                y: (fatherPos.y + motherPos.y) / 2
+                            };
+                            // Draw line from marriage midpoint to child
+                            this.drawParentChildLine(g, marriageMidpoint, memberPos, member);
                             parentChildCount++;
-                            console.log(`Parent-child line: ${member.father} → ${member.name}`);
+                            console.log(`Parent-child line: marriage midpoint → ${member.name}`);
                             drawnParentChild.add(parentChildKey);
                             hasValidParent = true;
                         }
@@ -329,31 +419,37 @@ class FamilyTree {
     drawMarriageLine(g, pos1, pos2) {
         const lineId = `marriage-${pos1.x}-${pos1.y}-${pos2.x}-${pos2.y}`;
         console.log(`🎨 Drawing marriage line: (${pos1.x}, ${pos1.y}) → (${pos2.x}, ${pos2.y}) [ID: ${lineId}]`);
-        g.append('line')
+        
+        // Create orthogonal path: horizontal line from pos1, then vertical line to pos2
+        const midX = (pos1.x + pos2.x) / 2;
+        const pathData = `M ${pos1.x} ${pos1.y} L ${midX} ${pos1.y} L ${midX} ${pos2.y} L ${pos2.x} ${pos2.y}`;
+        
+        g.append('path')
             .attr('id', lineId)
             .attr('class', 'link marriage')
-            .attr('x1', pos1.x)
-            .attr('y1', pos1.y)
-            .attr('x2', pos2.x)
-            .attr('y2', pos2.y)
+            .attr('d', pathData)
             .style('stroke', '#d53f8c')
             .style('stroke-width', 3)
-            .style('opacity', 0.7);
+            .style('opacity', 0.7)
+            .style('fill', 'none');
     }
 
     drawParentChildLine(g, parentPos, childPos, childMember) {
         const lineId = `parent-child-${parentPos.x}-${parentPos.y}-${childPos.x}-${childPos.y}-${childMember.name}`;
         console.log(`🎨 Drawing parent-child line: (${parentPos.x}, ${parentPos.y}) → (${childPos.x}, ${childPos.y}) for ${childMember.name} [ID: ${lineId}]`);
-        g.append('line')
+        
+        // Create orthogonal path: vertical line from parent, then horizontal line to child
+        const midY = (parentPos.y + childPos.y) / 2;
+        const pathData = `M ${parentPos.x} ${parentPos.y} L ${parentPos.x} ${midY} L ${childPos.x} ${midY} L ${childPos.x} ${childPos.y}`;
+        
+        g.append('path')
             .attr('id', lineId)
             .attr('class', 'link parent-child')
-            .attr('x1', parentPos.x)
-            .attr('y1', parentPos.y)
-            .attr('x2', childPos.x)
-            .attr('y2', childPos.y)
+            .attr('d', pathData)
             .style('stroke', '#3182ce')
             .style('stroke-width', 2)
-            .style('opacity', 0.7);
+            .style('opacity', 0.7)
+            .style('fill', 'none');
     }
 
     drawNodes(g, positions) {
